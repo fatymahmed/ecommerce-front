@@ -6,7 +6,6 @@ const Home = () => (
     <Layout title='Home page' description='Node React Ecommerce'>
       ...
     </Layout>
-    ;
   </div>
 );
 

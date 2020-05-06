@@ -6,7 +6,6 @@ const Signin = () => (
     <Layout title='Signin' description='Node React Ecommerce'>
       ...
     </Layout>
-    ;
   </div>
 );
 
