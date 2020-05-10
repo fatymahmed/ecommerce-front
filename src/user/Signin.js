@@ -5,7 +5,7 @@ import { signin, authenticate, isAuthenticated } from "../auth";
 
 const Signin = () => {
   const [values, setValues] = useState({
-    email: "tester@gmail.com",
+    email: "testuser@gmail.com",
     password: "123456",
     error: "",
     loading: false,
@@ -95,6 +95,9 @@ const Signin = () => {
       } else {
         return <Redirect to='/user/dashboard' />;
       }
+    }
+    if (isAuthenticated()) {
+      return <Redirect to='/' />;
     }
   };
 
