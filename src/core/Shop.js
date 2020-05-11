@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Layout from "./Layout";
 import Card from "./Card";
-import { getCategories } from "./apiCore";
+import { getCategories, getFilteredProducts } from "./apiCore";
 import Checkbox from "./Checkbox";
 import RadioBox from "./RadioBox";
 import { prices } from "./FixedPrices";
@@ -12,6 +12,9 @@ const Shop = () => {
   });
   const [categories, setCategories] = useState([]);
   const [error, setError] = useState(false);
+  const [limit, setLimit] = useState(6);
+  const [skip, setSkip] = useState(0);
+  const [filteredResults, setFilteredResults] = useState([]);
 
   const init = () => {
     getCategories().then((data) => {
@@ -23,8 +26,19 @@ const Shop = () => {
     });
   };
 
+  const loadFilteredResults = (newFilters) => {
+    getFilteredProducts(skip, limit, newFilters).then((data) => {
+      if (data.error) {
+        setError(data.error);
+      } else {
+        setFilteredResults(data);
+      }
+    });
+  };
+
   useEffect(() => {
     init();
+    loadFilteredResults(skip, limit, myFilters.filters);
   }, []);
 
   const handleFilters = (filters, filterBy) => {
@@ -34,6 +48,7 @@ const Shop = () => {
       let priceValues = handlePrice(filters);
       newFilters.filters[filterBy] = priceValues;
     }
+    loadFilteredResults(myFilters.filters);
     setMyFilters(newFilters);
   };
 
@@ -73,7 +88,7 @@ const Shop = () => {
             />
           </div>{" "}
         </div>
-        <div className='col-8'>{JSON.stringify(myFilters)}</div>
+        <div className='col-8'>{JSON.stringify(filteredResults)}</div>
       </div>
     </Layout>
   );
