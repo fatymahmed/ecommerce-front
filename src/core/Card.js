@@ -2,10 +2,16 @@ import React, { useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import moment from "moment";
 import ShowImage from "./ShowImage";
-import { addItem } from "./cartHelpers";
+import { addItem, updateItem } from "./cartHelpers";
 
-const Card = ({ product, showViewProductButton = true }) => {
+const Card = ({
+  product,
+  showViewProductButton = true,
+  showAddToCartButton = true,
+  cartUpdate = false,
+}) => {
   const [redirect, setRedirect] = useState(false);
+  const [count, setCount] = useState(product.count);
 
   const showViewButton = (showViewProductButton) =>
     showViewProductButton && (
@@ -28,11 +34,18 @@ const Card = ({ product, showViewProductButton = true }) => {
     }
   };
 
-  const showAddToCartButton = () => (
-    <button onClick={addToCart} className='btn btn-outline-warning mt-2 mb-2'>
-      Add to Cart
-    </button>
-  );
+  const showAddToCart = (showAddToCartButton) => {
+    return (
+      showAddToCartButton && (
+        <button
+          onClick={addToCart}
+          className='btn btn-outline-warning mt-2 mb-2'
+        >
+          Add to Cart
+        </button>
+      )
+    );
+  };
 
   const showStock = (quantity) =>
     quantity > 0 ? (
@@ -40,6 +53,32 @@ const Card = ({ product, showViewProductButton = true }) => {
     ) : (
       <span className='badge badge-primary badge-pill'>Out of Stock</span>
     );
+
+  const handleChange = (productId) => (event) => {
+    setCount(event.target.value < 1 ? 1 : event.target.value);
+    if (event.target.value >= 1) {
+      updateItem(productId, event.target.value);
+    }
+  };
+
+  const showCartUpdateOptions = (cartUpdate) => {
+    return (
+      cartUpdate && (
+        <div>
+          <div className='input-group-prepend'>
+            <span className='input-group-text'>Adjust Quantity</span>
+          </div>
+          <input
+            type='number'
+            className='form-control'
+            value={count}
+            onChange={handleChange(product._id)}
+          />
+          Increment
+        </div>
+      )
+    );
+  };
 
   return (
     <div className='card'>
@@ -56,7 +95,8 @@ const Card = ({ product, showViewProductButton = true }) => {
         {showStock(product.quantity)}
         <br />
         {showViewButton(showViewProductButton)}
-        {showAddToCartButton()}
+        {showAddToCart(showAddToCartButton)}
+        {showCartUpdateOptions(cartUpdate)}
       </div>
     </div>
   );
