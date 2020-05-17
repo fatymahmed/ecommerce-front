@@ -24,9 +24,7 @@ const Card = ({
     );
 
   const addToCart = () => {
-    addItem(product, () => {
-      setRedirect(true);
-    });
+    addItem(product, setRedirect(true));
   };
 
   const shouldRedirect = (redirect) => {
