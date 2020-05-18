@@ -48,8 +48,8 @@ const Product = (props) => {
         <div className='col-4'>
           <h4>Related Products</h4>
           {relatedProducts.map((product, i) => (
-            <div className='mb-3'>
-              <Card key={i} product={product} />
+            <div className='mb-3' key={i}>
+              <Card product={product} />
             </div>
           ))}
         </div>
