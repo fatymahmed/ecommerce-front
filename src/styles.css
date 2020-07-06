@@ -3,7 +3,101 @@
 .nav :hover {
   border-radius: 0px;
 }
+
+/**/
+.logo {
+  width: 12%;
+}
 /*cart bagde*/
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 0px;
+  font-size: 22px;
+}
+
+.nav-item a:hover,
+.navbar div a:hover {
+  text-decoration: underline;
+}
+
+.search-field {
+  width: 40%;
+  margin: 0 auto;
+  top: 10px;
+  position: absolute;
+  right: 30%;
+}
+
+.search-field div form span {
+  background: none;
+  border: none;
+}
+
+.search-bar {
+  display: flex;
+}
+
+.search-field span {
+  display: flex;
+}
+
+/* The container must be positioned relative: */
+.custom-select {
+  position: relative;
+  font-family: Arial;
+  border: none;
+  background: none;
+  padding: 0px;
+}
+
+/* Style the arrow inside the select element: */
+.select-selected:after {
+  position: absolute;
+  content: "";
+  top: 14px;
+  right: 10px;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-color: #fff transparent transparent transparent;
+}
+
+/* Point the arrow upwards when the select box is open (active): */
+.select-selected.select-arrow-active:after {
+  border-color: transparent transparent #fff transparent;
+  top: 7px;
+}
+
+/* style the items (options), including the selected item: */
+.select-items div,
+.select-selected {
+  color: #ffffff;
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+  cursor: pointer;
+}
+
+/* Style items (options): */
+.select-items {
+  position: absolute;
+  background-color: DodgerBlue;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 99;
+}
+
+/* Hide the items when the select box is closed: */
+.select-hide {
+  display: none;
+}
+
+.select-items div:hover,
+.same-as-selected {
+  background-color: rgba(0, 0, 0, 0.1);
+}
 
 .cart-badge,
 .cart-badge:hover {
@@ -13,10 +107,10 @@
   font-size: italic;
 }
 /*Single product*/
-.name {
-  background: indigo;
-  color: #fff;
-  font-weight: bold;
+
+.product-body {
+  background-color: #f7f7f9;
+  padding: 10px;
 }
 
 .product-img {
@@ -27,11 +121,26 @@
   margin-top: -20px;
 }
 
+.filter-by {
+  margin-top: 50px;
+  background-color: #f5f5f5;
+  padding: 10px;
+}
+
 @media only screen and (max-width: 600px) {
   .jumbotron h2 {
     margin-top: 10px;
   }
 }
+
+@media only screen and (max-width: 768px) {
+  .search-field {
+    position: static;
+    width: 90%;
+    margin: 0px;
+  }
+}
+
 .jumbotron {
   width: 30wh;
   height: 30vh;

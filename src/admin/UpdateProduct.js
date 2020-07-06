@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Link, Redirect } from "react-router-dom";
 import Layout from "../core/Layout";
 import { isAuthenticated } from "../auth";
-import { getProduct, updateProduct, getCategories } from "./apiAdmin";
+import { Link, Redirect } from "react-router-dom";
+import { getProduct, getCategories, updateProduct } from "./apiAdmin";
 
 const UpdateProduct = ({ match }) => {
-  const { user, token } = isAuthenticated();
   const [values, setValues] = useState({
     name: "",
     description: "",
@@ -16,23 +15,25 @@ const UpdateProduct = ({ match }) => {
     quantity: "",
     photo: "",
     loading: false,
-    error: "",
-    updatedProduct: "",
+    error: false,
+    createdProduct: "",
     redirectToProfile: false,
     formData: "",
   });
+  const [categories, setCategories] = useState([]);
 
+  const { user, token } = isAuthenticated();
   const {
     name,
     description,
     price,
-    categories,
+    // categories,
     category,
     shipping,
     quantity,
     loading,
     error,
-    updatedProduct,
+    createdProduct,
     redirectToProfile,
     formData,
   } = values;
@@ -42,6 +43,7 @@ const UpdateProduct = ({ match }) => {
       if (data.error) {
         setValues({ ...values, error: data.error });
       } else {
+        // populate the state
         setValues({
           ...values,
           name: data.name,
@@ -52,6 +54,7 @@ const UpdateProduct = ({ match }) => {
           quantity: data.quantity,
           formData: new FormData(),
         });
+        // load categories
         initCategories();
       }
     });
@@ -63,7 +66,7 @@ const UpdateProduct = ({ match }) => {
       if (data.error) {
         setValues({ ...values, error: data.error });
       } else {
-        setValues({ categories: data, formData: new FormData() });
+        setCategories(data);
       }
     });
   };
@@ -81,6 +84,7 @@ const UpdateProduct = ({ match }) => {
   const clickSubmit = (event) => {
     event.preventDefault();
     setValues({ ...values, error: "", loading: true });
+
     updateProduct(match.params.productId, user._id, token, formData).then(
       (data) => {
         if (data.error) {
@@ -94,8 +98,9 @@ const UpdateProduct = ({ match }) => {
             price: "",
             quantity: "",
             loading: false,
+            error: false,
             redirectToProfile: true,
-            updatedProduct: data.name,
+            createdProduct: data.name,
           });
         }
       }
@@ -106,7 +111,7 @@ const UpdateProduct = ({ match }) => {
     <form className='mb-3' onSubmit={clickSubmit}>
       <h4>Post Photo</h4>
       <div className='form-group'>
-        <label className='btn btn-outline-secondary'>
+        <label className='btn btn-secondary'>
           <input
             onChange={handleChange("photo")}
             type='file'
@@ -130,7 +135,6 @@ const UpdateProduct = ({ match }) => {
         <label className='text-muted'>Description</label>
         <textarea
           onChange={handleChange("description")}
-          type='text'
           className='form-control'
           value={description}
         />
@@ -160,6 +164,15 @@ const UpdateProduct = ({ match }) => {
       </div>
 
       <div className='form-group'>
+        <label className='text-muted'>Shipping</label>
+        <select onChange={handleChange("shipping")} className='form-control'>
+          <option>Please select</option>
+          <option value='0'>No</option>
+          <option value='1'>Yes</option>
+        </select>
+      </div>
+
+      <div className='form-group'>
         <label className='text-muted'>Quantity</label>
         <input
           onChange={handleChange("quantity")}
@@ -169,16 +182,7 @@ const UpdateProduct = ({ match }) => {
         />
       </div>
 
-      <div className='form-group'>
-        <label className='text-muted'>Shipping</label>
-        <select onChange={handleChange("shipping")} className='form-control'>
-          <option>Please select</option>
-          <option value='0'>No</option>
-          <option value='1'>Yes</option>
-        </select>
-      </div>
-
-      <button className='btn button-outline-primary'>Update Product</button>
+      <button className='btn btn-outline-primary'>Update Product</button>
     </form>
   );
 
@@ -194,16 +198,16 @@ const UpdateProduct = ({ match }) => {
   const showSuccess = () => (
     <div
       className='alert alert-info'
-      style={{ display: updatedProduct ? "" : "none" }}
+      style={{ display: createdProduct ? "" : "none" }}
     >
-      <h2>{`${updatedProduct}`} is updated</h2>
+      <h2>{`${createdProduct}`} is updated!</h2>
     </div>
   );
 
   const showLoading = () =>
     loading && (
       <div className='alert alert-success'>
-        <h2>Loading ...</h2>
+        <h2>Loading...</h2>
       </div>
     );
 
@@ -216,7 +220,10 @@ const UpdateProduct = ({ match }) => {
   };
 
   return (
-    <Layout title='Update Product' description={`Update product`}>
+    <Layout
+      title='Add a new product'
+      description={`G'day ${user.name}, ready to add a new product?`}
+    >
       <div className='row'>
         <div className='col-md-8 offset-md-2'>
           {showLoading()}

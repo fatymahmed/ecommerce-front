@@ -2,24 +2,27 @@ import React, { Fragment } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { signout, isAuthenticated } from "../auth";
 import { itemTotal } from "./cartHelpers";
+import "../styles.css";
+import logo from "../logos.png";
 
 const isActive = (history, path) => {
   if (history.location.pathname === path) {
     return { color: "#ff9900" };
   } else {
-    return { color: "#ffffff" };
+    return { color: "#007bff" };
   }
 };
 
 const Menu = ({ history }) => {
   return (
-    <div>
-      <ul className='nav nav-tabs bg-primary'>
-        <li className='nav-item'>
-          <Link className='nav-link' style={isActive(history, "/")} to='/'>
-            Home
-          </Link>
-        </li>
+    <div className='navbar'>
+      <div>
+        {" "}
+        <Link className='nav-link' style={isActive(history, "/")} to='/'>
+          LELA BOOKSHOP
+        </Link>
+      </div>
+      <ul className='nav navbar-expand-lg'>
         <li className='nav-item'>
           <Link
             className='nav-link'
@@ -32,7 +35,7 @@ const Menu = ({ history }) => {
         <li className='nav-item'>
           <Link
             className='nav-link'
-            style={isActive(history, "/shop")}
+            style={isActive(history, "/cart")}
             to='/cart'
           >
             Cart{" "}
@@ -91,7 +94,7 @@ const Menu = ({ history }) => {
           <li className='nav-item'>
             <span
               className='nav-link'
-              style={{ cursor: "pointer", color: "#ffffff" }}
+              style={{ cursor: "pointer", color: "#000000" }}
               onClick={() =>
                 signout(() => {
                   history.push("/");
